@@ -1,11 +1,13 @@
-import logzero
+import logging
+
 import pandas as pd
 import requests_cache
 from spotipy.oauth2 import SpotifyOAuth
 
 from secret_vars import CLIENT_ID, CLIENT_SECRET
 
-logger = logzero.logger
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger()
 
 
 def get_auth_token():
