@@ -4,3 +4,5 @@ git config user.email "actions@users.noreply.github.com"
 git add -A
 git commit -m "Latest data: %date% %time%" || exit 0
 git push
+git config user.name "mlinds"
+git config user.email "max.lindsay95@gmail.com"
