@@ -105,7 +105,7 @@ def generic_download(url, parse_func, csv_out):
         parse_func (func): A function to parse the list of JSON strings
         csv_out (path-line): where to store the CSV
     """
-    with requests_cache.CachedSession("spotify_cache",backend='sqlite',expire_after=20) as session:
+    with requests_cache.CachedSession("spotify_cache",backend='sqlite',cache_control=True) as session:
 
         headers = {
             "Authorization": f"Bearer {token}",
@@ -115,6 +115,8 @@ def generic_download(url, parse_func, csv_out):
         logger.info("Requesting data from %s", PREFIX + url)
         request = session.get(PREFIX + url, headers=headers)
         logger.info("Spotify API Request Status:%s", request.status_code)
+        logger.info('From cache: %s',str(request.from_cache))
+        logger.info('Cache expires at: %s',str(request.expires))
         # initialize df using appropriate parser
         df = pd.DataFrame(parse_func(request.json()))
 
@@ -125,7 +127,10 @@ def generic_download(url, parse_func, csv_out):
                 break
             logger.info("Requesting data from %s", next_url)
             request = session.get(next_url, headers=headers)
+            logger.info('Cache expires at: %s',str(request.expires))
             logger.info("Spotify API Request Status:%s", request.status_code)
+            logger.info('From cache: %s',str(request.from_cache))
+
             temp_df = pd.DataFrame(parse_func(request.json()))
             df = pd.concat([df, temp_df], ignore_index=True)
 
