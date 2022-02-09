@@ -156,10 +156,16 @@ def download_recent_streams():
     parse_func = parse_recent_tracks_json
     generic_download(url=url, parse_func=parse_func, csv_out=csv_path)
 
+def append_recent_streams():
+    all_stream_df = pd.read_csv('./data_out/streamHistory.csv')
+    to_append = pd.read_csv('./data_out/recent.csv')
+    pd.concat([all_stream_df,to_append],ignore_index=True).drop_duplicates().to_csv('./data_out/streamHistory.csv')
+
 if __name__ == "__main__":
 
     download_recent_streams()
-    download_library_tracks()
-    download_recent_top("short")
-    download_recent_top("medium")
-    download_recent_top("long")
+    append_recent_streams()
+    # download_library_tracks()
+    # download_recent_top("short")
+    # download_recent_top("medium")
+    # download_recent_top("long")
