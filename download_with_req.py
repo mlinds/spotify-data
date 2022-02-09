@@ -131,7 +131,7 @@ def generic_download(url, parse_func, csv_out):
 
 def download_library_tracks():
     """Download all library tracks
-    """    
+    """
     url = "me/tracks"
     csv_path = "./data_out/all_tracks.csv"
     parse_func = parse_library_json
@@ -142,7 +142,7 @@ def download_recent_top(time_range):
 
     Args:
         time_range (str): Based on the spotify API, either short, medium or long
-    """    
+    """
     url = f"me/top/tracks?time_range={time_range}_term"
     csv_path = f"./data_out/top_tracks_{time_range}.csv"
     parse_func = parse_top_tracks_json
@@ -150,7 +150,7 @@ def download_recent_top(time_range):
 
 def download_recent_streams():
     """Download the most recent streams
-    """    
+    """
     url = "me/player/recently-played?limit=10"
     csv_path = "./data_out/recent.csv"
     parse_func = parse_recent_tracks_json
