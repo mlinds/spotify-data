@@ -140,7 +140,7 @@ def download_recent_top(time_range):
 def download_recent():
 
     url = "me/player/recently-played?limit=10"
-    with requests_cache.CachedSession("recent_songs_cache") as s:
+    with requests_cache.CachedSession("recent_songs_cache",expire_after=7200) as s:
 
         headers = {
             "Authorization": f"Bearer {token}",
