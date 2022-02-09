@@ -97,7 +97,7 @@ def parse_recent_tracks_json(api_return):
         yield songdata
 
 
-def generic_download(url, parse_func, csv_out):
+def generic_download(url, parse_func, csv_out,cache_control=True):
     """Queries the Spotify API, parses the resonse, and saves it as a csv formatted file
 
     Args:
@@ -127,7 +127,7 @@ def generic_download(url, parse_func, csv_out):
                 break
             logger.info("Requesting data from %s", next_url)
             request = session.get(next_url, headers=headers)
-            logger.info('Cache expires at: %s',str(request.expires))
+            logger.info('Cache expires at: %s',str(request.expires_after))
             logger.info("Spotify API Request Status:%s", request.status_code)
             logger.info('From cache: %s',str(request.from_cache))
 
