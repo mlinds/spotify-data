@@ -1,4 +1,3 @@
-#%%
 import logging
 
 import pandas as pd
@@ -33,13 +32,14 @@ PREFIX = "https://api.spotify.com/v1/"
 
 
 def parse_library_json(api_return):
-    """[summary]
+    """
+    Used for getting the all tracks from a library
 
     Args:
-        api_return (json-formatted string): The Response from the Spotify API
+        api_return (list): List of JSON-formatted strings
 
     Yields:
-        dict: Dictionary of the relevant data
+        dict: Dictionary of the relevant data for each track
     """
     for item in api_return["items"]:
         songdata = {
@@ -58,10 +58,10 @@ def parse_top_tracks_json(api_return):
     Parse the API response when requesting top tracks
 
     Args:
-        api_return (str): JSON formatted Spotify API response string
+        api_return (list): List of JSON-formatted strings
 
     Yields:
-        [type]: [description]
+        dict: Dictionary of the relevant data for each track
     """
     for item in api_return["items"]:
         songdata = {
@@ -79,10 +79,10 @@ def parse_recent_tracks_json(api_return):
     """[summary]
 
     Args:
-        api_return ([type]): [description]
+        api_return (list): List of JSON-formatted strings
 
     Yields:
-        [type]: [description]
+        dict: Dictionary of the relevant data for each track
     """
     for item in api_return["items"]:
         songdata = {
@@ -98,12 +98,12 @@ def parse_recent_tracks_json(api_return):
 
 
 def generic_download(url, parse_func, csv_out):
-    """[summary]
+    """ Queries the Spotify API, parses the resonse, and saves it as a csv formatted file
 
     Args:
-        url ([type]): [description]
-        parse_func ([type]): [description]
-        csv_out ([type]): [description]
+        url (str): Spotiy REST endpoint of interest
+        parse_func (func): A function to parse the list of JSON strings
+        csv_out (path-line): where to store the CSV
     """
     with requests_cache.CachedSession("spotify_cache") as session:
 
@@ -120,47 +120,46 @@ def generic_download(url, parse_func, csv_out):
             next_url = request.json()["next"]
             if next_url is None:
                 break
-            logger.debug("Requesting data from %s" % next_url)
+            logger.debug("Requesting data from %s", next_url)
             request = session.get(next_url, headers=headers)
-            logger.debug("Request Status:%s" % request.status_code)
+            logger.debug("Spotify API Request Status:%s", request.status_code)
             temp_df = pd.DataFrame(parse_func(request.json()))
             df = pd.concat([df, temp_df], ignore_index=True)
 
         df.to_csv(csv_out)
 
 
-def download_tracks():
+def download_library_tracks():
+    """Download all library tracks
+    """    
     url = "me/tracks"
     csv_path = "./data_out/all_tracks.csv"
     parse_func = parse_library_json
-    
     generic_download(url=url, parse_func=parse_func, csv_out=csv_path)
 
 def download_recent_top(time_range):
+    """Downloads the top tracks in a certain time range
+
+    Args:
+        time_range (str): Based on the spotify API, either short, medium or long
+    """    
     url = f"me/top/tracks?time_range={time_range}_term"
     csv_path = f"./data_out/top_tracks_{time_range}.csv"
     parse_func = parse_top_tracks_json
     generic_download(url=url, parse_func=parse_func, csv_out=csv_path)
 
-
-# %%
-def download_recent():
+def download_recent_streams():
+    """Download the most recent streams
+    """    
     url = "me/player/recently-played?limit=10"
     csv_path = "./data_out/recent.csv"
     parse_func = parse_recent_tracks_json
     generic_download(url=url, parse_func=parse_func, csv_out=csv_path)
-        
 
-
-#%%~
 if __name__ == "__main__":
 
-    download_tracks()
-
+    download_recent_streams()
+    download_library_tracks()
     download_recent_top("short")
     download_recent_top("medium")
     download_recent_top("long")
-    
-    download_recent()
-
-# %%
