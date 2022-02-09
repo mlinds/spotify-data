@@ -6,7 +6,7 @@ from spotipy.oauth2 import SpotifyOAuth
 
 from secret_vars import CLIENT_ID, CLIENT_SECRET
 
-logging.basicConfig(filename='sp_api.log',level=logging.INFO)
+logging.basicConfig(filename='sp_api.log',level=logging.DEBUG)
 logger = logging.getLogger()
 
 
@@ -127,7 +127,7 @@ def generic_download(url, parse_func, csv_out,cache_control=True):
                 break
             logger.info("Requesting data from %s", next_url)
             request = session.get(next_url, headers=headers)
-            logger.info('Cache expires at: %s',str(request.expires_after))
+            logger.info('Cache expires at: %s',str(request.expires))
             logger.info("Spotify API Request Status:%s", request.status_code)
             logger.info('From cache: %s',str(request.from_cache))
 
