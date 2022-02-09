@@ -196,3 +196,4 @@ cython_debug/
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,jupyternotebooks
 
 spotify_cache.sqlite
+spotify_cache.sqlite-journal

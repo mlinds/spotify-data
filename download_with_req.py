@@ -1,3 +1,4 @@
+#%%
 import logging
 
 import pandas as pd
@@ -81,9 +82,9 @@ def download_tracks():
             next_url = r.json()["next"]
             if next_url is None:
                 break
-            logger.debug(f"Requesting data from {next_url}")
+            logger.debug("Requesting data from %s" % next_url)
             r = s.get(next_url, headers=headers)
-            logger.debug(f"Request Status:{r.status_code}")
+            logger.debug("Request Status:%s" % r.status_code)
             df2 = pd.DataFrame(create_spot_df(r.json()))
             df = pd.concat([df, df2], ignore_index=True)
 
@@ -91,6 +92,7 @@ def download_tracks():
 
 
 def download_recent_top(time_range):
+    
     url = f"me/top/tracks?time_range={time_range}_term"
     with requests_cache.CachedSession("spotify_cache") as s:
 
@@ -99,7 +101,7 @@ def download_recent_top(time_range):
             "Content-Type": "application/json",
         }
         # hit the endpoint once to get the first 'next' url
-        logger.debug(f"Requesting data from {PREFIX+url}")
+        logger.debug("Requesting data from %s" % PREFIX+url)
         r = s.get(PREFIX + url, headers=headers)
         df = pd.DataFrame(create_spot_df_top(r.json()))
 
@@ -107,15 +109,44 @@ def download_recent_top(time_range):
             next_url = r.json()["next"]
             if next_url is None:
                 break
-            logger.debug(f"Requesting data from {next_url}")
+            logger.debug("Requesting data from %s" % next_url)
             r = s.get(next_url, headers=headers)
-            logger.debug(f"Request Status: {r.status_code}")
+            logger.debug("Request Status:%s"% r.status_code)
             df2 = pd.DataFrame(create_spot_df_top(r.json()))
             df = pd.concat([df, df2], ignore_index=True)
 
         df.to_csv(f"./data_out/top_tracks_{time_range}.csv")
 
+# %%
+def download_recent():
+    
+    url = "me/player/recently-played"
+    with requests_cache.CachedSession("spotify_cache") as s:
 
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+        }
+        # hit the endpoint once to get the first 'next' url
+        logger.debug("Requesting data from %s" % PREFIX+url)
+        r = s.get(PREFIX + url, headers=headers)
+        df = pd.DataFrame(create_spot_df(r.json()))
+
+        # going to keep this limited for now until I debug all the other code
+        for _ in range(30):
+            next_url = r.json()["next"]
+            if next_url is None:
+                break
+            logger.debug("Requesting data from %s" % next_url)
+            r = s.get(next_url, headers=headers)
+            logger.debug("Request Status:%s"% r.status_code)
+            df2 = pd.DataFrame(create_spot_df(r.json()))
+            df = pd.concat([df, df2], ignore_index=True)
+
+        df.to_csv("./data_out/recent.csv")
+        return r
+
+#%%~
 if __name__ == "__main__":
 
     download_tracks()
@@ -123,5 +154,6 @@ if __name__ == "__main__":
     download_recent_top("short")
     download_recent_top("medium")
     download_recent_top("long")
+    download_recent()
 
 # %%
