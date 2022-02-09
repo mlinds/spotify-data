@@ -6,7 +6,7 @@ from spotipy.oauth2 import SpotifyOAuth
 
 from secret_vars import CLIENT_ID, CLIENT_SECRET
 
-logging.basicConfig(filename='sp_api.log',level=logging.INFO,filemode='w')
+logging.basicConfig(filename='sp_api.log',level=logging.DEBUG,filemode='w')
 logger = logging.getLogger()
 
 
@@ -97,7 +97,7 @@ def parse_recent_tracks_json(api_return):
         yield songdata
 
 
-def generic_download(url, parse_func, csv_out,cache_control=True):
+def generic_download(url, parse_func, csv_out):
     """Queries the Spotify API, parses the resonse, and saves it as a csv formatted file
 
     Args:
@@ -105,7 +105,12 @@ def generic_download(url, parse_func, csv_out,cache_control=True):
         parse_func (func): A function to parse the list of JSON strings
         csv_out (path-line): where to store the CSV
     """
-    with requests_cache.CachedSession("spotify_cache",backend='sqlite',cache_control=True,expire_after=0.001) as session:
+    with requests_cache.CachedSession("spotify_cache",
+    backend='sqlite',
+    cache_control=True,
+    match_headers=True,
+    ignored_parameters="Authorization",
+    expire_after=30) as session:
 
         headers = {
             "Authorization": f"Bearer {token}",
@@ -113,25 +118,29 @@ def generic_download(url, parse_func, csv_out,cache_control=True):
         }
         # hit the endpoint once to get the first 'next' url
         logger.info("Requesting data from %s", PREFIX + url)
-        request = session.get(PREFIX + url, headers=headers)
-        logger.info("Spotify API Request Status:%s", request.status_code)
-        logger.info('From cache: %s',str(request.from_cache))
-        logger.info('Cache expires at: %s',str(request.expires))
+        response = session.get(PREFIX + url, headers=headers)
+        logger.info("Spotify API Request Status:%s", response.status_code)
+        logger.debug('request: ',response.request.headers)
+        logger.debug('response:',response.headers)
+        logger.info('From cache: %s',str(response.from_cache))
+        logger.info('Cache expires at: %s',response.expires)
         # initialize df using appropriate parser
-        df = pd.DataFrame(parse_func(request.json()))
+        df = pd.DataFrame(parse_func(response.json()))
 
         # loop over the differenet pages provided by the spotify API pagination
-        while request.status_code == 200:
-            next_url = request.json()["next"]
+        while response.status_code == 200:
+            next_url = response.json()["next"]
             if next_url is None:
                 break
             logger.info("Requesting data from %s", next_url)
-            request = session.get(next_url, headers=headers)
-            logger.info('Cache expires at: %s',str(request.expires))
-            logger.info("Spotify API Request Status:%s", request.status_code)
-            logger.info('From cache: %s',str(request.from_cache))
+            response = session.get(next_url, headers=headers)
+            logger.debug(response.headers)
+            logger.debug(response.request.headers)
+            logger.info('Cache expires at: %s',response.expires)
+            logger.info("Spotify API Request Status:%s", response.status_code)
+            logger.info('From cache: %s',str(response.from_cache))
 
-            temp_df = pd.DataFrame(parse_func(request.json()))
+            temp_df = pd.DataFrame(parse_func(response.json()))
             df = pd.concat([df, temp_df], ignore_index=True)
 
         df.to_csv(csv_out, index=None)
