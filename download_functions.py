@@ -101,11 +101,11 @@ def generic_download(url, parse_func, csv_out):
     """Queries the Spotify API, parses the resonse, and saves it as a csv formatted file
 
     Args:
-        url (str): Spotiy REST endpoint of interest
+        url (str): Spotify REST endpoint of interest
         parse_func (func): A function to parse the list of JSON strings
         csv_out (path-line): where to store the CSV
     """
-    with requests_cache.CachedSession("spotify_cache") as session:
+    with requests_cache.CachedSession("spotify_cache",backend='sqlite') as session:
 
         headers = {
             "Authorization": f"Bearer {token}",
