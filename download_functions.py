@@ -6,7 +6,7 @@ from spotipy.oauth2 import SpotifyOAuth
 
 from secret_vars import CLIENT_ID, CLIENT_SECRET
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(filename='sp_api.log',level=logging.INFO)
 logger = logging.getLogger()
 
 
@@ -105,7 +105,7 @@ def generic_download(url, parse_func, csv_out):
         parse_func (func): A function to parse the list of JSON strings
         csv_out (path-line): where to store the CSV
     """
-    with requests_cache.CachedSession("spotify_cache",backend='sqlite') as session:
+    with requests_cache.CachedSession("spotify_cache",backend='sqlite',expire_after=20) as session:
 
         headers = {
             "Authorization": f"Bearer {token}",
@@ -174,4 +174,5 @@ if __name__ == '__main__':
     download_recent_top("short")
     download_recent_top("medium")
     download_recent_top("long")
+    
     
