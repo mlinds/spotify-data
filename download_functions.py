@@ -118,8 +118,8 @@ def generic_download(url, parse_func, csv_out):
     """
     with requests_cache.CachedSession("spotify_cache",
     backend='sqlite',
-    # cache_control=True,
-    # match_headers=True,
+    cache_control=True,
+    match_headers=True,
     # ignored_parameters="Authorization",
     expire_after=120) as session:
 
