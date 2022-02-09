@@ -115,7 +115,7 @@ def generic_download(url, parse_func, csv_out):
         logger.info("Requesting data from %s", PREFIX + url)
         request = session.get(PREFIX + url, headers=headers)
         logger.info("Spotify API Request Status:%s", request.status_code)
-        # initialize df using appropriate parser 
+        # initialize df using appropriate parser
         df = pd.DataFrame(parse_func(request.json()))
 
         # loop over the differenet pages provided by the spotify API pagination
@@ -163,18 +163,9 @@ def download_recent_streams():
 
 def append_recent_streams():
     download_recent_streams()
-    all_stream_df = pd.read_csv("./data_out/streamHistory.csv", index_col="timePlayed")
-    to_append = pd.read_csv("./data_out/recent.csv", index_col="timePlayed")
-    pd.concat([all_stream_df, to_append]).drop_duplicates().to_csv(
-        "./data_out/streamHistory.csv"
+    all_stream_df = pd.read_csv("./data_out/streamHistory.csv")
+    to_append = pd.read_csv("./data_out/recent.csv")
+    pd.concat([all_stream_df, to_append]).drop_duplicates().sort_values('timePlayed').to_csv(
+        "./data_out/streamHistory.csv",index=False
     )
-
-
-if __name__ == "__main__":
-
-    download_recent_streams()
-    append_recent_streams()
-    # download_library_tracks()
-    download_recent_top("short")
-    download_recent_top("medium")
-    download_recent_top("long")
+    return None
