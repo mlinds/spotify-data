@@ -6,7 +6,7 @@ from spotipy.oauth2 import SpotifyOAuth
 
 from secret_vars import CLIENT_ID, CLIENT_SECRET
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
 
@@ -112,21 +112,25 @@ def generic_download(url, parse_func, csv_out):
             "Content-Type": "application/json",
         }
         # hit the endpoint once to get the first 'next' url
+        logger.info("Requesting data from %s", PREFIX + url)
         request = session.get(PREFIX + url, headers=headers)
-
+        logger.info("Spotify API Request Status:%s", request.status_code)
+        # initialize df using appropriate parser 
         df = pd.DataFrame(parse_func(request.json()))
 
+        # loop over the differenet pages provided by the spotify API pagination
         while request.status_code == 200:
             next_url = request.json()["next"]
             if next_url is None:
                 break
-            logger.debug("Requesting data from %s", next_url)
+            logger.info("Requesting data from %s", next_url)
             request = session.get(next_url, headers=headers)
-            logger.debug("Spotify API Request Status:%s", request.status_code)
+            logger.info("Spotify API Request Status:%s", request.status_code)
             temp_df = pd.DataFrame(parse_func(request.json()))
             df = pd.concat([df, temp_df], ignore_index=True)
 
-        df.to_csv(csv_out,index=None)
+        df.to_csv(csv_out, index=None)
+        logger.info('CSV data saved to %s',csv_out)
 
 
 def download_library_tracks():
@@ -159,8 +163,8 @@ def download_recent_streams():
 
 def append_recent_streams():
     download_recent_streams()
-    all_stream_df = pd.read_csv("./data_out/streamHistory.csv",index_col='timePlayed')
-    to_append = pd.read_csv("./data_out/recent.csv",index_col='timePlayed')
+    all_stream_df = pd.read_csv("./data_out/streamHistory.csv", index_col="timePlayed")
+    to_append = pd.read_csv("./data_out/recent.csv", index_col="timePlayed")
     pd.concat([all_stream_df, to_append]).drop_duplicates().to_csv(
         "./data_out/streamHistory.csv"
     )
@@ -170,7 +174,7 @@ if __name__ == "__main__":
 
     download_recent_streams()
     append_recent_streams()
-    download_library_tracks()
+    # download_library_tracks()
     download_recent_top("short")
     download_recent_top("medium")
     download_recent_top("long")
