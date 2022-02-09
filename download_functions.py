@@ -102,7 +102,7 @@ def request_logging(func):
         logger.info("Requesting data from %s", requrl)
         response = func(requrl,reqheaders)
         logger.info("Spotify API Request Status:%s", response.status_code)
-        logger.debug('request: ',response.request.headers)
+        logger.debug('request: '+str(response.request.headers))
         logger.debug('response:',response.headers)
         logger.info('From cache: %s',str(response.from_cache))
         logger.info('Cache expires at: %s',response.expires)
