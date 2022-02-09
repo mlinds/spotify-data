@@ -1,4 +1,5 @@
 import logging
+from datetime import timedelta
 
 import pandas as pd
 import requests_cache
@@ -6,7 +7,7 @@ from spotipy.oauth2 import SpotifyOAuth
 
 from secret_vars import CLIENT_ID, CLIENT_SECRET
 
-logging.basicConfig(filename='sp_api.log',level=logging.DEBUG,filemode='w')
+logging.basicConfig(filename='sp_api.log',level=logging.INFO,filemode='w')
 logger = logging.getLogger()
 
 
@@ -96,6 +97,16 @@ def parse_recent_tracks_json(api_return):
 
         yield songdata
 
+def request_logging(func):
+    def wrapper(requrl,reqheaders):
+        logger.info("Requesting data from %s", requrl)
+        response = func(requrl,reqheaders)
+        logger.info("Spotify API Request Status:%s", response.status_code)
+        logger.debug('request: ',response.request.headers)
+        logger.debug('response:',response.headers)
+        logger.info('From cache: %s',str(response.from_cache))
+        logger.info('Cache expires at: %s',response.expires)
+    return wrapper
 
 def generic_download(url, parse_func, csv_out):
     """Queries the Spotify API, parses the resonse, and saves it as a csv formatted file
@@ -107,15 +118,16 @@ def generic_download(url, parse_func, csv_out):
     """
     with requests_cache.CachedSession("spotify_cache",
     backend='sqlite',
-    cache_control=True,
-    match_headers=True,
-    ignored_parameters="Authorization",
-    expire_after=30) as session:
+    # cache_control=True,
+    # match_headers=True,
+    # ignored_parameters="Authorization",
+    expire_after=120) as session:
 
         headers = {
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
         }
+
         # hit the endpoint once to get the first 'next' url
         logger.info("Requesting data from %s", PREFIX + url)
         response = session.get(PREFIX + url, headers=headers)
