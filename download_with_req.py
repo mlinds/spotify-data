@@ -98,7 +98,7 @@ def parse_recent_tracks_json(api_return):
 
 
 def generic_download(url, parse_func, csv_out):
-    """ Queries the Spotify API, parses the resonse, and saves it as a csv formatted file
+    """Queries the Spotify API, parses the resonse, and saves it as a csv formatted file
 
     Args:
         url (str): Spotiy REST endpoint of interest
@@ -126,16 +126,16 @@ def generic_download(url, parse_func, csv_out):
             temp_df = pd.DataFrame(parse_func(request.json()))
             df = pd.concat([df, temp_df], ignore_index=True)
 
-        df.to_csv(csv_out)
+        df.to_csv(csv_out,index=None)
 
 
 def download_library_tracks():
-    """Download all library tracks
-    """
+    """Download all library tracks"""
     url = "me/tracks"
     csv_path = "./data_out/all_tracks.csv"
     parse_func = parse_library_json
     generic_download(url=url, parse_func=parse_func, csv_out=csv_path)
+
 
 def download_recent_top(time_range):
     """Downloads the top tracks in a certain time range
@@ -148,24 +148,29 @@ def download_recent_top(time_range):
     parse_func = parse_top_tracks_json
     generic_download(url=url, parse_func=parse_func, csv_out=csv_path)
 
+
 def download_recent_streams():
-    """Download the most recent streams
-    """
+    """Download the most recent streams"""
     url = "me/player/recently-played?limit=10"
     csv_path = "./data_out/recent.csv"
     parse_func = parse_recent_tracks_json
     generic_download(url=url, parse_func=parse_func, csv_out=csv_path)
 
+
 def append_recent_streams():
-    all_stream_df = pd.read_csv('./data_out/streamHistory.csv')
-    to_append = pd.read_csv('./data_out/recent.csv')
-    pd.concat([all_stream_df,to_append],ignore_index=True).drop_duplicates().to_csv('./data_out/streamHistory.csv')
+    download_recent_streams()
+    all_stream_df = pd.read_csv("./data_out/streamHistory.csv",index_col='timePlayed')
+    to_append = pd.read_csv("./data_out/recent.csv",index_col='timePlayed')
+    pd.concat([all_stream_df, to_append]).drop_duplicates().to_csv(
+        "./data_out/streamHistory.csv"
+    )
+
 
 if __name__ == "__main__":
 
     download_recent_streams()
     append_recent_streams()
-    # download_library_tracks()
-    # download_recent_top("short")
-    # download_recent_top("medium")
-    # download_recent_top("long")
+    download_library_tracks()
+    download_recent_top("short")
+    download_recent_top("medium")
+    download_recent_top("long")
