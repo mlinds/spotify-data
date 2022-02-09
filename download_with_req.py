@@ -32,10 +32,14 @@ token = get_auth_token()
 PREFIX = "https://api.spotify.com/v1/"
 
 
-def create_spot_df(api_return):
-    """
-    iterator that returns a dictionary of the relevant information from the html repsonse
+def parse_library_json(api_return):
+    """[summary]
 
+    Args:
+        api_return (json-formatted string): The Response from the Spotify API
+
+    Yields:
+        dict: Dictionary of the relevant data
     """
     for item in api_return["items"]:
         songdata = {
@@ -49,10 +53,15 @@ def create_spot_df(api_return):
         yield songdata
 
 
-def create_spot_df_top(api_return):
+def parse_top_tracks_json(api_return):
     """
-    iterator that returns a dictionary of the relevant information from the html repsonse
+    Parse the API response when requesting top tracks
 
+    Args:
+        api_return (str): JSON formatted Spotify API response string
+
+    Yields:
+        [type]: [description]
     """
     for item in api_return["items"]:
         songdata = {
@@ -66,10 +75,14 @@ def create_spot_df_top(api_return):
         yield songdata
 
 
-def create_spot_df_recent(api_return):
-    """
-    iterator that returns a dictionary of the relevant information from the html repsonse
+def parse_recent_tracks_json(api_return):
+    """[summary]
 
+    Args:
+        api_return ([type]): [description]
+
+    Yields:
+        [type]: [description]
     """
     for item in api_return["items"]:
         songdata = {
@@ -84,86 +97,59 @@ def create_spot_df_recent(api_return):
         yield songdata
 
 
+def generic_download(url, parse_func, csv_out):
+    """[summary]
+
+    Args:
+        url ([type]): [description]
+        parse_func ([type]): [description]
+        csv_out ([type]): [description]
+    """
+    with requests_cache.CachedSession("spotify_cache") as session:
+
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+        }
+        # hit the endpoint once to get the first 'next' url
+        request = session.get(PREFIX + url, headers=headers)
+
+        df = pd.DataFrame(parse_func(request.json()))
+
+        while request.status_code == 200:
+            next_url = request.json()["next"]
+            if next_url is None:
+                break
+            logger.debug("Requesting data from %s" % next_url)
+            request = session.get(next_url, headers=headers)
+            logger.debug("Request Status:%s" % request.status_code)
+            temp_df = pd.DataFrame(parse_func(request.json()))
+            df = pd.concat([df, temp_df], ignore_index=True)
+
+        df.to_csv(csv_out)
+
+
 def download_tracks():
     url = "me/tracks"
-    with requests_cache.CachedSession("spotify_cache") as s:
-
-        headers = {
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-        }
-        # hit the endpoint once to get the first 'next' url
-        r = s.get(PREFIX + url, headers=headers)
-        df = pd.DataFrame(create_spot_df(r.json()))
-
-        while r.status_code == 200:
-            next_url = r.json()["next"]
-            if next_url is None:
-                break
-            logger.debug("Requesting data from %s" % next_url)
-            r = s.get(next_url, headers=headers)
-            logger.debug("Request Status:%s" % r.status_code)
-            df2 = pd.DataFrame(create_spot_df(r.json()))
-            df = pd.concat([df, df2], ignore_index=True)
-
-        df.to_csv("./data_out/all_tracks.csv")
-
+    csv_path = "./data_out/all_tracks.csv"
+    parse_func = parse_library_json
+    
+    generic_download(url=url, parse_func=parse_func, csv_out=csv_path)
 
 def download_recent_top(time_range):
-
     url = f"me/top/tracks?time_range={time_range}_term"
-    with requests_cache.CachedSession("spotify_cache") as s:
-
-        headers = {
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-        }
-        # hit the endpoint once to get the first 'next' url
-        logger.debug("Requesting data from %s" % PREFIX + url)
-        r = s.get(PREFIX + url, headers=headers)
-        df = pd.DataFrame(create_spot_df_top(r.json()))
-
-        while r.status_code == 200:
-            next_url = r.json()["next"]
-            if next_url is None:
-                break
-            logger.debug("Requesting data from %s" % next_url)
-            r = s.get(next_url, headers=headers)
-            logger.debug("Request Status:%s" % r.status_code)
-            df2 = pd.DataFrame(create_spot_df_top(r.json()))
-            df = pd.concat([df, df2], ignore_index=True)
-
-        df.to_csv(f"./data_out/top_tracks_{time_range}.csv")
+    csv_path = f"./data_out/top_tracks_{time_range}.csv"
+    parse_func = parse_top_tracks_json
+    generic_download(url=url, parse_func=parse_func, csv_out=csv_path)
 
 
 # %%
 def download_recent():
-
     url = "me/player/recently-played?limit=10"
-    with requests_cache.CachedSession("recent_songs_cache",expire_after=7200) as s:
-
-        headers = {
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-        }
-        # hit the endpoint once to get the first 'next' url
-        logger.debug("Requesting data from %s" % PREFIX + url)
-        r = s.get(PREFIX + url, headers=headers)
-        df = pd.DataFrame(create_spot_df_recent(r.json()))
-
-        # going to keep this limited for now until I debug all the other code
-        for _ in range(200):
-            next_url = r.json()["next"]
-            if next_url is None:
-                logger.debug("No next URL recieved, ending download")
-                break
-            logger.debug("Requesting data from %s" % next_url)
-            r = s.get(next_url, headers=headers)
-            logger.debug("Request Status:%s" % r.status_code)
-            df2 = pd.DataFrame(create_spot_df_recent(r.json()))
-            df = pd.concat([df, df2], ignore_index=True)
-
-        df.to_csv("./data_out/recent.csv")
+    csv_path = "./data_out/recent.csv"
+    parse_func = parse_recent_tracks_json
+    generic_download(url=url, parse_func=parse_func, csv_out=csv_path)
+        
 
 
 #%%~
@@ -174,6 +160,7 @@ if __name__ == "__main__":
     download_recent_top("short")
     download_recent_top("medium")
     download_recent_top("long")
+    
     download_recent()
 
 # %%
