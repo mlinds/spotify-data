@@ -197,3 +197,4 @@ cython_debug/
 
 spotify_cache.sqlite
 spotify_cache.sqlite-journal
+recent_songs_cache.sqlite

@@ -66,6 +66,24 @@ def create_spot_df_top(api_return):
         yield songdata
 
 
+def create_spot_df_recent(api_return):
+    """
+    iterator that returns a dictionary of the relevant information from the html repsonse
+
+    """
+    for item in api_return["items"]:
+        songdata = {
+            "name": item["track"]["name"],
+            "popularity": item["track"]["popularity"],
+            "albumName": item["track"]["album"]["name"],
+            "artistNames": item["track"]["artists"][0]["name"],
+            "spotifyUri": item["track"]["uri"],
+            "timePlayed": item["played_at"],
+        }
+
+        yield songdata
+
+
 def download_tracks():
     url = "me/tracks"
     with requests_cache.CachedSession("spotify_cache") as s:
@@ -92,7 +110,7 @@ def download_tracks():
 
 
 def download_recent_top(time_range):
-    
+
     url = f"me/top/tracks?time_range={time_range}_term"
     with requests_cache.CachedSession("spotify_cache") as s:
 
@@ -101,7 +119,7 @@ def download_recent_top(time_range):
             "Content-Type": "application/json",
         }
         # hit the endpoint once to get the first 'next' url
-        logger.debug("Requesting data from %s" % PREFIX+url)
+        logger.debug("Requesting data from %s" % PREFIX + url)
         r = s.get(PREFIX + url, headers=headers)
         df = pd.DataFrame(create_spot_df_top(r.json()))
 
@@ -111,40 +129,42 @@ def download_recent_top(time_range):
                 break
             logger.debug("Requesting data from %s" % next_url)
             r = s.get(next_url, headers=headers)
-            logger.debug("Request Status:%s"% r.status_code)
+            logger.debug("Request Status:%s" % r.status_code)
             df2 = pd.DataFrame(create_spot_df_top(r.json()))
             df = pd.concat([df, df2], ignore_index=True)
 
         df.to_csv(f"./data_out/top_tracks_{time_range}.csv")
 
+
 # %%
 def download_recent():
-    
-    url = "me/player/recently-played"
-    with requests_cache.CachedSession("spotify_cache") as s:
+
+    url = "me/player/recently-played?limit=10"
+    with requests_cache.CachedSession("recent_songs_cache") as s:
 
         headers = {
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
         }
         # hit the endpoint once to get the first 'next' url
-        logger.debug("Requesting data from %s" % PREFIX+url)
+        logger.debug("Requesting data from %s" % PREFIX + url)
         r = s.get(PREFIX + url, headers=headers)
-        df = pd.DataFrame(create_spot_df(r.json()))
+        df = pd.DataFrame(create_spot_df_recent(r.json()))
 
         # going to keep this limited for now until I debug all the other code
-        for _ in range(30):
+        for _ in range(200):
             next_url = r.json()["next"]
             if next_url is None:
+                logger.debug("No next URL recieved, ending download")
                 break
             logger.debug("Requesting data from %s" % next_url)
             r = s.get(next_url, headers=headers)
-            logger.debug("Request Status:%s"% r.status_code)
-            df2 = pd.DataFrame(create_spot_df(r.json()))
+            logger.debug("Request Status:%s" % r.status_code)
+            df2 = pd.DataFrame(create_spot_df_recent(r.json()))
             df = pd.concat([df, df2], ignore_index=True)
 
         df.to_csv("./data_out/recent.csv")
-        return r
+
 
 #%%~
 if __name__ == "__main__":
