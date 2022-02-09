@@ -168,4 +168,6 @@ def append_recent_streams():
     pd.concat([all_stream_df, to_append]).drop_duplicates().sort_values('timePlayed').to_csv(
         "./data_out/streamHistory.csv",index=False
     )
-    return None
+
+if __name__ == '__main__':
+    append_recent_streams()
