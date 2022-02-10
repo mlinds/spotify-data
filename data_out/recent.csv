@@ -1,4 +1,19 @@
 name,popularity,albumName,artistNames,spotifyUri,timePlayed
+Laid,48,Laid,The Pains Of Being Pure At Heart,spotify:track:0JBhtS8zMP6QZFdSCzRjUa,2022-02-10T14:16:59.671Z
+Sugarcrush,1,Sugarcrush,Joanna Gruesome,spotify:track:4sgdjkCP344zUZVRdpjwN9,2022-02-10T14:06:36.852Z
+Psychick Espionage,1,Astonishing Adventures,Joanna Gruesome,spotify:track:1Li5eFj0TZvuyEBPIw96bq,2022-02-10T14:02:34.320Z
+Pretty Fucking Sick (Of It All),5,Pretty Fucking Sick (Of It All),Joanna Gruesome,spotify:track:0i8uissuQ39wVty2Iqt3Vb,2022-02-10T13:58:01.393Z
+Graveyard,7,Weird Sister,Joanna Gruesome,spotify:track:4UvIlBGpDdJ5vxIAHBI0Gp,2022-02-10T13:52:41.332Z
+Do You Really Wanna Know Why Yr Still in Love with Me?,10,Weird Sister,Joanna Gruesome,spotify:track:2i1xs9wlYIAct3MH40IaRY,2022-02-10T13:45:18.833Z
+Secret Surprise,13,Weird Sister,Joanna Gruesome,spotify:track:4VdgpH8fsJtYuI9mzQ1NnB,2022-02-10T13:42:30.400Z
+Lemonade Grrrl,16,Weird Sister,Joanna Gruesome,spotify:track:2qoPwGz9XrPvCKs3Ete6hT,2022-02-10T13:39:45.665Z
+Madison,9,Weird Sister,Joanna Gruesome,spotify:track:5SgTgehTsMK9gw79Ea4osN,2022-02-10T13:37:41.219Z
+Wussy Void,27,Weird Sister,Joanna Gruesome,spotify:track:28lfs8yqFqFA8KI2tewGf6,2022-02-10T13:35:07.457Z
+Sugarcrush,15,Weird Sister,Joanna Gruesome,spotify:track:3iZUU1gLtY3CaNGlSDv1aT,2022-02-10T13:31:42.522Z
+Anti-Parent Cowboy Killers,19,Weird Sister,Joanna Gruesome,spotify:track:0iJ7r7US1W6ucCmtrm13dG,2022-02-10T13:28:57.754Z
+Hey! I Wanna Be Yr Best Friend,4,Peanut Butter,Joanna Gruesome,spotify:track:2CjyBEP0Ij3KM7gdtXhsqt,2022-02-10T13:26:19.334Z
+Psykick Espionage,9,Peanut Butter,Joanna Gruesome,spotify:track:2cqOcxsrChlCJwpy5gD8Cn,2022-02-10T13:24:17.451Z
+Separate Bedrooms,5,Peanut Butter,Joanna Gruesome,spotify:track:426sj3InraBxPtVaX21gcL,2022-02-10T13:22:09.626Z
 Jerome (Liar),5,Peanut Butter,Joanna Gruesome,spotify:track:14xFD42i9cB1p4tfBlDAN4,2022-02-10T13:20:09.999Z
 I Don't Wanna Relax,5,Peanut Butter,Joanna Gruesome,spotify:track:32sIdclhXXAYHl8sdlLhZJ,2022-02-10T13:18:30.161Z
 Crayon,5,Peanut Butter,Joanna Gruesome,spotify:track:0dY3FFeB7KdIbQfroTF8bF,2022-02-10T13:16:15.420Z
@@ -34,18 +49,3 @@ CORSO,72,CALL ME IF YOU GET LOST,"Tyler, The Creator",spotify:track:46oHvXwpEZOF
 Ghost Town,79,ye,Kanye West,spotify:track:7vgTNTaEz3CsBZ1N4YQalM,2022-02-10T09:42:25.581Z
 Bound 2,83,Yeezus,Kanye West,spotify:track:3sNVsP50132BTNlImLx70i,2022-02-10T09:37:54.039Z
 Send It Up,60,Yeezus,Kanye West,spotify:track:3RKblQNJs8HPvWBgXmq6nn,2022-02-10T09:34:04.966Z
-Guilt Trip,60,Yeezus,Kanye West,spotify:track:5nPOM0nFRAJ3XI8xCxNAzO,2022-02-10T09:31:06.704Z
-Blood On The Leaves,69,Yeezus,Kanye West,spotify:track:42GcjriRK6srwHkfbkBqVl,2022-02-10T09:27:03.718Z
-I'm In It,60,Yeezus,Kanye West,spotify:track:52NmkyHsGsHGb1UX8fTkMg,2022-02-10T09:21:03.574Z
-Hold My Liquor,68,Yeezus,Kanye West,spotify:track:5nIu0VwPOsjkF61zfevLKh,2022-02-10T09:17:08.925Z
-New Slaves,67,Yeezus,Kanye West,spotify:track:4cAgkb0ifwn0FSHGXnr4F6,2022-02-10T09:11:42.011Z
-I Am A God,62,Yeezus,Kanye West,spotify:track:0HMCdlOPJkAGlB0MlSWIcO,2022-02-10T09:07:25.369Z
-Black Skinhead,78,Yeezus,Kanye West,spotify:track:722tgOgdIbNe3BEyLnejw4,2022-02-10T09:03:33.929Z
-On Sight,67,Yeezus,Kanye West,spotify:track:1gqkRc9WtOpnGIqxf2Hvzr,2022-02-10T09:00:25.965Z
-Shameika,52,Fetch The Bolt Cutters,Fiona Apple,spotify:track:2pDKE8Q40TDGPl1O11DKKn,2022-02-10T08:55:29.476Z
-I Want You To Love Me,59,Fetch The Bolt Cutters,Fiona Apple,spotify:track:73SBAGI4fPFm4VkB3NjXq8,2022-02-10T08:51:21.295Z
-Monstro,20,Full Communism,Downtown Boys,spotify:track:0WWvOTYN70qR2knVzpx0JP,2022-02-09T23:50:06.974Z
-Jj,41,Nothing Feels Natural,Priests,spotify:track:5pmswGf4fU7jQq7SlpLK1M,2022-02-09T23:50:05.447Z
-Dancing In The Dark,27,Full Communism,Downtown Boys,spotify:track:7yrGzz7Y48T68jE4jtYiQ2,2022-02-09T23:47:05.987Z
-Here Comes The Summer,33,EP,The Fiery Furnaces,spotify:track:7BeAt3JCnQux4ISaSaAyas,2022-02-09T23:43:00.715Z
-Do You Realize??,65,Yoshimi Battles the Pink Robots,The Flaming Lips,spotify:track:2DFRFqWNahKtFD112H2iEZ,2022-02-09T23:39:52.615Z
