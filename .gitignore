@@ -2,12 +2,13 @@ secret_vars.py
 .cache
 .cache-maelinds
 
-*
+
 !data_out/
 !src/
 !download_functions.py
 !update_spot.
-!.github/
+
+
 # Created by https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,jupyternotebooks
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,visualstudiocode,jupyternotebooks
 
@@ -202,3 +203,4 @@ cython_debug/
 spotify_cache.sqlite
 spotify_cache.sqlite-journal
 recent_songs_cache.sqlite
+
