@@ -33,7 +33,7 @@ def get_auth_token():
         # requests_timeout=20
     )
     
-    return manager.get_access_token()
+    return manager.get_access_token(as_dict=False)
 
 token = get_auth_token()
 logger.debug('authentication worked')
