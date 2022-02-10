@@ -15,8 +15,8 @@ except ImportError:
     CLIENT_SECRET = getenv('CLIENT_SECRET')
     
 
-# logging.basicConfig(filename='sp_api.log',level=logging.INFO,filemode='w')0
-# logger = logging.getLogger()
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger()
 
 
 def get_auth_token():
@@ -34,9 +34,12 @@ def get_auth_token():
 
     return manager.get_access_token(as_dict=False)
 
-
-token = get_auth_token()
-
+try:
+    token = get_auth_token()
+    logger.debug('authentication worked')
+except:
+    exit(1)
+    
 PREFIX = "https://api.spotify.com/v1/"
 
 
