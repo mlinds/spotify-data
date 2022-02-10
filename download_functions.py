@@ -28,7 +28,7 @@ def get_auth_token():
         scope=scope,
         username="maelinds",
         client_id=CLIENT_ID,
-        # client_secret=CLIENT_SECRET,
+        # client_secret=CLIENT_SECRET, # not needed for pkce
         redirect_uri="http://localhost:7777/callback",
         requests_timeout=20
     )
@@ -119,7 +119,7 @@ def request_logging(func):
     return wrapper
 
 def generic_download(url, parse_func, csv_out):
-    """Queries the Spotify API, parses the resonse, and saves it as a csv formatted file
+    """Queries the Spotify API, parses the response, and saves it as a csv formatted file
 
     Args:
         url (str): Spotify REST endpoint of interest
@@ -201,7 +201,7 @@ def append_recent_streams():
     download_recent_streams()
     all_stream_df = pd.read_csv("./data_out/streamHistory.csv")
     to_append = pd.read_csv("./data_out/recent.csv")
-    pd.concat([all_stream_df, to_append]).drop_duplicates().sort_values('timePlayed').to_csv(
+    pd.concat([all_stream_df, to_append]).drop_duplicates(subset=['name','albumName','artistNames','spotifyUri','timePlayed']).sort_values('timePlayed').to_csv(
         "./data_out/streamHistory.csv",index=False
     )
 
