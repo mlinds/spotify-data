@@ -4,7 +4,7 @@ from os import getenv
 
 import pandas as pd
 import requests_cache
-from spotipy.oauth2 import SpotifyPKCE
+from spotipy.oauth2 import SpotifyOAuth
 
 try:
     from secret_vars import CLIENT_ID, CLIENT_SECRET
@@ -24,13 +24,13 @@ def get_auth_token():
     Based on the scope and the user vars, and Auth token is returned for later use
     """
     scope = "user-library-read,playlist-read-private,user-top-read,user-read-recently-played"
-    manager = SpotifyPKCE(
+    manager = SpotifyOAuth(
         scope=scope,
         username="maelinds",
         client_id=CLIENT_ID,
-        # client_secret=CLIENT_SECRET, # not needed for pkce
+        client_secret=CLIENT_SECRET, # not needed for pkce
         redirect_uri="http://localhost:7777/callback",
-        requests_timeout=20
+        # requests_timeout=20
     )
     
     return manager.get_access_token()

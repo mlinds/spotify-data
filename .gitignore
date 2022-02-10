@@ -1,6 +1,6 @@
 secret_vars.py
 .cache
-.cache-maelinds
+!.cache-maelinds
 
 
 !data_out/
