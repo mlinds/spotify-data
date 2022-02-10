@@ -1,5 +1,11 @@
 name,popularity,albumName,artistNames,spotifyUri,timePlayed
+To Be Loved,81,30,Adele,spotify:track:10ImcQk9tihY1EKMDIbvXJ,2022-02-10T15:31:06.923Z
+2010,63,2010,Earl Sweatshirt,spotify:track:5kUgMxXcpAdsnKumXs4J5Z,2022-02-10T15:24:22.077Z
+midnight sun,54,midnight sun,Nilüfer Yanya,spotify:track:3IRHPt9MGFCUhunOcqZC7R,2022-02-10T15:21:53.610Z
+Royal and Desire,50,Time Skiffs,Animal Collective,spotify:track:7CKJp9xqS6tUaGjfTThJCX,2022-02-10T15:15:41.513Z
+Dragon Slayer,55,Time Skiffs,Animal Collective,spotify:track:3xLif937bg3cCIgzGxs9TA,2022-02-10T15:09:54.268Z
 Wheel,25,Pompeii,Cate Le Bon,spotify:track:2TWhMQfYs5EBkcPBnnD3id,2022-02-10T15:02:59.818Z
+Dirt on the Bed,30,Pompeii,Cate Le Bon,spotify:track:1mhVCuP7ebwpmfCc2zE64U,2022-02-10T14:57:30.822Z
 ...And Keep on Reaching for Those Stars,2,Astonishing Adventures,Joanna Gruesome,spotify:track:2E4PCTE2VT9hSLbpW8NQ2l,2022-02-10T14:50:30.832Z
 90210,34,The Courtneys,The Courtneys,spotify:track:14hMPAYT3yRC73RREe88UL,2022-02-10T14:49:15.177Z
 Throw Aggi Off the Bridge,29,Black Tambourine,Black Tambourine,spotify:track:5NJrNhuALfl84VAquskp0n,2022-02-10T14:45:15.407Z
@@ -22,7 +28,7 @@ Psychick Espionage,1,Astonishing Adventures,Joanna Gruesome,spotify:track:1Li5eF
 Occult Bookshop,2,Pretty Fucking Sick (Of It All),Joanna Gruesome,spotify:track:7lAP9FcRAMiS2jimSWh2hu,2022-02-10T14:00:26.350Z
 Pretty Fucking Sick (Of It All),5,Pretty Fucking Sick (Of It All),Joanna Gruesome,spotify:track:0i8uissuQ39wVty2Iqt3Vb,2022-02-10T13:58:01.393Z
 Satan,6,Weird Sister,Joanna Gruesome,spotify:track:0oVy9LorMUHoZpLPMFr1Z8,2022-02-10T13:54:52.561Z
-Graveyard,6,Weird Sister,Joanna Gruesome,spotify:track:4UvIlBGpDdJ5vxIAHBI0Gp,2022-02-10T13:52:41.332Z
+Graveyard,7,Weird Sister,Joanna Gruesome,spotify:track:4UvIlBGpDdJ5vxIAHBI0Gp,2022-02-10T13:52:41.332Z
 Candy,7,Weird Sister,Joanna Gruesome,spotify:track:0YcBE9WzUDni7RccpCywpX,2022-02-10T13:49:20.860Z
 Do You Really Wanna Know Why Yr Still in Love with Me?,10,Weird Sister,Joanna Gruesome,spotify:track:2i1xs9wlYIAct3MH40IaRY,2022-02-10T13:45:18.833Z
 Secret Surprise,13,Weird Sister,Joanna Gruesome,spotify:track:4VdgpH8fsJtYuI9mzQ1NnB,2022-02-10T13:42:30.400Z
@@ -34,7 +40,7 @@ Anti-Parent Cowboy Killers,19,Weird Sister,Joanna Gruesome,spotify:track:0iJ7r7U
 Hey! I Wanna Be Yr Best Friend,4,Peanut Butter,Joanna Gruesome,spotify:track:2CjyBEP0Ij3KM7gdtXhsqt,2022-02-10T13:26:19.334Z
 Psykick Espionage,9,Peanut Butter,Joanna Gruesome,spotify:track:2cqOcxsrChlCJwpy5gD8Cn,2022-02-10T13:24:17.451Z
 Separate Bedrooms,5,Peanut Butter,Joanna Gruesome,spotify:track:426sj3InraBxPtVaX21gcL,2022-02-10T13:22:09.626Z
-Jerome (Liar),4,Peanut Butter,Joanna Gruesome,spotify:track:14xFD42i9cB1p4tfBlDAN4,2022-02-10T13:20:09.999Z
+Jerome (Liar),5,Peanut Butter,Joanna Gruesome,spotify:track:14xFD42i9cB1p4tfBlDAN4,2022-02-10T13:20:09.999Z
 I Don't Wanna Relax,5,Peanut Butter,Joanna Gruesome,spotify:track:32sIdclhXXAYHl8sdlLhZJ,2022-02-10T13:18:30.161Z
 Crayon,5,Peanut Butter,Joanna Gruesome,spotify:track:0dY3FFeB7KdIbQfroTF8bF,2022-02-10T13:16:15.420Z
 There Is No Function Stacy,6,Peanut Butter,Joanna Gruesome,spotify:track:4MN6btwC6eowaljkytv4e2,2022-02-10T13:13:04.930Z
@@ -43,9 +49,3 @@ Jamie (Luvver),5,Peanut Butter,Joanna Gruesome,spotify:track:2h2vDiwgLiHXPVh1c16
 Last Year,12,Peanut Butter,Joanna Gruesome,spotify:track:72AewQg8QsVB6IVQE8g3tC,2022-02-10T13:07:33.466Z
 Psykick Espionage,9,Peanut Butter,Joanna Gruesome,spotify:track:2cqOcxsrChlCJwpy5gD8Cn,2022-02-10T13:04:40.789Z
 Madison,9,Weird Sister,Joanna Gruesome,spotify:track:5SgTgehTsMK9gw79Ea4osN,2022-02-10T13:02:31.577Z
-Do You Really Wanna Know Why Yr Still in Love with Me?,10,Weird Sister,Joanna Gruesome,spotify:track:2i1xs9wlYIAct3MH40IaRY,2022-02-10T12:59:58.215Z
-Honestly Do Yr Worst,10,Peanut Butter,Joanna Gruesome,spotify:track:7tVmLvokX7LLyMcrZm0Gi0,2022-02-10T12:57:08.833Z
-Last Year,12,Peanut Butter,Joanna Gruesome,spotify:track:72AewQg8QsVB6IVQE8g3tC,2022-02-10T12:55:16.496Z
-Secret Surprise,13,Weird Sister,Joanna Gruesome,spotify:track:4VdgpH8fsJtYuI9mzQ1NnB,2022-02-10T12:52:23.655Z
-Sugarcrush,15,Weird Sister,Joanna Gruesome,spotify:track:3iZUU1gLtY3CaNGlSDv1aT,2022-02-10T12:49:38.848Z
-Lemonade Grrrl,16,Weird Sister,Joanna Gruesome,spotify:track:2qoPwGz9XrPvCKs3Ete6hT,2022-02-10T12:46:52.993Z
