@@ -15,8 +15,8 @@ except ImportError:
     CLIENT_SECRET = getenv('CLIENT_SECRET')
     
 
-logging.basicConfig(filename='sp_api.log',level=logging.INFO,filemode='w')
-logger = logging.getLogger()
+# logging.basicConfig(filename='sp_api.log',level=logging.INFO,filemode='w')0
+# logger = logging.getLogger()
 
 
 def get_auth_token():
