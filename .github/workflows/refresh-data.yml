@@ -1,4 +1,4 @@
-name: Python application
+name: refresh spotify data
 
 env:
   CLIENT_ID: ${{ secrets.CLIENT_ID }}
@@ -15,8 +15,8 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: "3.10"
-    - name: Automatic requirements.txt for Python Projects
-      uses: ryan-rozario/pipreqs-action@v2.0.0
+#     - name: Automatic requirements.txt for Python Projects
+#       uses: ryan-rozario/pipreqs-action@v2.0.0
     - name: Python Dependency Installation
       uses: py-actions/py-dependency-install@v3.0.0
     - name: update the data files
