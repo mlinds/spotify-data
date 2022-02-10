@@ -6,7 +6,8 @@ secret_vars.py
 !data_out/
 !src/
 !download_functions.py
-!update_spot.bat
+!update_spot.
+!.github/
 # Created by https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,jupyternotebooks
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,visualstudiocode,jupyternotebooks
 
