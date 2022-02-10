@@ -5,7 +5,14 @@ import pandas as pd
 import requests_cache
 from spotipy.oauth2 import SpotifyOAuth
 
-from secret_vars import CLIENT_ID, CLIENT_SECRET
+try:
+    from secret_vars import CLIENT_ID, CLIENT_SECRET
+except ImportError:
+    # for use in github actions workflow
+    import os
+    CLIENT_ID = os.getenv('CLIENT_ID')
+    CLIENT_SECRET = os.getenv('CLIENT_SECRET')
+
 
 logging.basicConfig(filename='sp_api.log',level=logging.INFO,filemode='w')
 logger = logging.getLogger()
