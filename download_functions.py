@@ -1,5 +1,6 @@
 import logging
 from datetime import timedelta
+from os import getenv
 
 import pandas as pd
 import requests_cache
@@ -8,13 +9,11 @@ from spotipy.oauth2 import SpotifyOAuth
 try:
     from secret_vars import CLIENT_ID, CLIENT_SECRET
 except ImportError:
-    print('importing from environment')
     # for use in github actions workflow
-    import os
-    CLIENT_ID = os.getenv('CLIENT_ID')
-    CLIENT_SECRET = os.getenv('CLIENT_SECRET')
-print(CLIENT_ID)
-print(CLIENT_SECRET)
+    
+    CLIENT_ID = getenv('CLIENT_ID')
+    CLIENT_SECRET = getenv('CLIENT_SECRET')
+    
 
 logging.basicConfig(filename='sp_api.log',level=logging.INFO,filemode='w')
 logger = logging.getLogger()
