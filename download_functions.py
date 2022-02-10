@@ -32,7 +32,7 @@ def get_auth_token():
         redirect_uri="http://localhost:7777/callback",
         requests_timeout=20
     )
-    # code = manager.get_authorization_code()
+    
     return manager.get_access_token()
 
 token = get_auth_token()
