@@ -30,7 +30,7 @@ jobs:
       with:
         name: SPOTIFY_CACHED_TOKEN
         value: env.SPOTIFY_TOKEN_CACHE
-        pa_token: ${{ secrets.PA_TOKEN }}  
+        pa_token: ${{ secrets.GITHUB_TOKEN }}  
     - name: commit and push if changed
       run: |-
         git config user.name "Automated"
