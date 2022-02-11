@@ -4,7 +4,7 @@ env:
   CLIENT_ID: ${{ secrets.CLIENT_ID }}
   CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  SPOTIFY_TOKEN_CACHE: ${{ secrets.CACHED_TOKEN}}
+  SPOTIFY_TOKEN_CACHE: ${{ secrets.SPOTIFY_CACHED_TOKEN}}
 on: 
   workflow_dispatch:
   push:
@@ -21,16 +21,18 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: "3.10"
-#     - name: Automatic requirements.txt for Python Projects
-#       uses: ryan-rozario/pipreqs-action@v2.0.0
     - name: Python Dependency Installation
       uses: py-actions/py-dependency-install@v3.0.0
     - name: update the data files
       run: python download_functions.py 
+    - name: set cache as the secret 
+      uses: gliech/create-github-secret-action@v1
+      with:
+        name: SPOTIFY_CACHED_TOKEN
+        value: env.SPOTIFY_TOKEN_CACHE
+        pa_token: ${{ secrets.PA_TOKEN }}  
     - name: commit and push if changed
       run: |-
-        gh auth login --with-token < ${{ GITHUB_TOKEN }}
-        gh secret set CACHED_TOKEN -f .cache-maelinds
         git config user.name "Automated"
         git config user.email "actions@users.noreply.github.com"
         git add ./data_out/*

@@ -2,7 +2,7 @@ import logging
 from datetime import timedelta
 from os import getenv
 from sys import stdout
-
+import optparse
 import pandas as pd
 import requests_cache
 from spotipy.oauth2 import SpotifyOAuth
@@ -11,10 +11,10 @@ try:
     from secret_vars import CLIENT_ID, CLIENT_SECRET
 except ImportError:
     # for use in github actions workflow
-    
-    CLIENT_ID = getenv('CLIENT_ID')
-    CLIENT_SECRET = getenv('CLIENT_SECRET')
-    
+
+    CLIENT_ID = getenv("CLIENT_ID")
+    CLIENT_SECRET = getenv("CLIENT_SECRET")
+
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger()
@@ -29,18 +29,19 @@ def get_auth_token():
         scope=scope,
         username="maelinds",
         client_id=CLIENT_ID,
-        client_secret=CLIENT_SECRET, # not needed for pkce
+        client_secret=CLIENT_SECRET,  # not needed for pkce
         redirect_uri="http://localhost:7777/callback",
         # requests_timeout=20
     )
-    
+
     return manager.get_access_token()
+
 
 # get the full token information
 refresh_dict = get_auth_token()
-token = refresh_dict['access_token']
+token = refresh_dict["access_token"]
 
-logger.debug('authentication worked')
+logger.debug("authentication worked")
 
 
 PREFIX = "https://api.spotify.com/v1/"
@@ -67,6 +68,7 @@ def parse_library_json(api_return):
 
         yield songdata
 
+
 def parse_top_tracks_json(api_return):
     """
     Parse the API response when requesting top tracks
@@ -87,6 +89,7 @@ def parse_top_tracks_json(api_return):
         }
 
         yield songdata
+
 
 def parse_recent_tracks_json(api_return):
     """[summary]
@@ -109,16 +112,19 @@ def parse_recent_tracks_json(api_return):
 
         yield songdata
 
+
 def request_logging(func):
-    def wrapper(requrl,reqheaders):
+    def wrapper(requrl, reqheaders):
         logger.info("Requesting data from %s", requrl)
-        response = func(requrl,reqheaders)
+        response = func(requrl, reqheaders)
         logger.info("Spotify API Request Status:%s", response.status_code)
-        logger.debug('request: '+str(response.request.headers))
-        logger.debug('response:',response.headers)
-        logger.info('From cache: %s',str(response.from_cache))
-        logger.info('Cache expires at: %s',response.expires)
+        logger.debug("request: " + str(response.request.headers))
+        logger.debug("response:", response.headers)
+        logger.info("From cache: %s", str(response.from_cache))
+        logger.info("Cache expires at: %s", response.expires)
+
     return wrapper
+
 
 def generic_download(url, parse_func, csv_out):
     """Queries the Spotify API, parses the response, and saves it as a csv formatted file
@@ -128,12 +134,14 @@ def generic_download(url, parse_func, csv_out):
         parse_func (func): A function to parse the list of JSON strings
         csv_out (path-line): where to store the CSV
     """
-    with requests_cache.CachedSession("spotify_cache",
-    backend='sqlite',
-    cache_control=True,
-    match_headers=True,
-    # ignored_parameters="Authorization",
-    expire_after=120) as session:
+    with requests_cache.CachedSession(
+        "spotify_cache",
+        backend="sqlite",
+        cache_control=True,
+        match_headers=True,
+        # ignored_parameters="Authorization",
+        expire_after=120,
+    ) as session:
 
         headers = {
             "Authorization": f"Bearer {token}",
@@ -144,10 +152,10 @@ def generic_download(url, parse_func, csv_out):
         logger.info("Requesting data from %s", PREFIX + url)
         response = session.get(PREFIX + url, headers=headers)
         logger.info("Spotify API Request Status:%s", response.status_code)
-        logger.debug('request: ',response.request.headers)
-        logger.debug('response:',response.headers)
-        logger.info('From cache: %s',str(response.from_cache))
-        logger.info('Cache expires at: %s',response.expires)
+        logger.debug("request: ", response.request.headers)
+        logger.debug("response:", response.headers)
+        logger.info("From cache: %s", str(response.from_cache))
+        logger.info("Cache expires at: %s", response.expires)
         # initialize df using appropriate parser
         df = pd.DataFrame(parse_func(response.json()))
 
@@ -160,15 +168,16 @@ def generic_download(url, parse_func, csv_out):
             response = session.get(next_url, headers=headers)
             logger.debug(response.headers)
             logger.debug(response.request.headers)
-            logger.info('Cache expires at: %s',response.expires)
+            logger.info("Cache expires at: %s", response.expires)
             logger.info("Spotify API Request Status:%s", response.status_code)
-            logger.info('From cache: %s',str(response.from_cache))
+            logger.info("From cache: %s", str(response.from_cache))
 
             temp_df = pd.DataFrame(parse_func(response.json()))
             df = pd.concat([df, temp_df], ignore_index=True)
 
         df.to_csv(csv_out, index=None)
-        logger.info('CSV data saved to %s',csv_out)
+        logger.info("CSV data saved to %s", csv_out)
+
 
 def download_library_tracks():
     """Download all library tracks"""
@@ -176,6 +185,7 @@ def download_library_tracks():
     csv_path = "./data_out/all_tracks.csv"
     parse_func = parse_library_json
     generic_download(url=url, parse_func=parse_func, csv_out=csv_path)
+
 
 def download_recent_top(time_range):
     """Downloads the top tracks in a certain time range
@@ -188,6 +198,7 @@ def download_recent_top(time_range):
     parse_func = parse_top_tracks_json
     generic_download(url=url, parse_func=parse_func, csv_out=csv_path)
 
+
 def download_recent_streams():
     """Download the most recent streams"""
     url = "me/player/recently-played?limit=10"
@@ -195,22 +206,23 @@ def download_recent_streams():
     parse_func = parse_recent_tracks_json
     generic_download(url=url, parse_func=parse_func, csv_out=csv_path)
 
+
 def append_recent_streams():
     download_recent_streams()
     all_stream_df = pd.read_csv("./data_out/streamHistory.csv")
     to_append = pd.read_csv("./data_out/recent.csv")
-    pd.concat([all_stream_df, to_append]).drop_duplicates(subset=['name','albumName','artistNames','spotifyUri','timePlayed']).sort_values('timePlayed').to_csv(
-        "./data_out/streamHistory.csv",index=False
-    )
+    pd.concat([all_stream_df, to_append]).drop_duplicates(
+        subset=["name", "albumName", "artistNames", "spotifyUri", "timePlayed"]
+    ).sort_values("timePlayed").to_csv("./data_out/streamHistory.csv", index=False)
+
 
 def token_output():
     return token
-if __name__ == '__main__':
+
+
+if __name__ == "__main__":
     append_recent_streams()
     download_recent_top("short")
     download_recent_top("medium")
     download_recent_top("long")
-    # stdout.write(str(refresh_dict))
-    
-    
-    
+    os.environ["SPOTIFY_TOKEN_CACHE"] = refresh_dict
