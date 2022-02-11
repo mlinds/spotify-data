@@ -210,7 +210,7 @@ if __name__ == '__main__':
     download_recent_top("short")
     download_recent_top("medium")
     download_recent_top("long")
-    stdout.write(str(refresh_dict))
+    # stdout.write(str(refresh_dict))
     
     
     
