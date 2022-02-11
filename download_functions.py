@@ -227,4 +227,6 @@ if __name__ == "__main__":
     download_recent_top("short")
     download_recent_top("medium")
     download_recent_top("long")
+    print(os.getenv('SPOTIFY_TOKEN_CACHE'))
     os.environ["SPOTIFY_TOKEN_CACHE"] = str(refresh_dict)
+    print(os.getenv('SPOTIFY_TOKEN_CACHE'))
