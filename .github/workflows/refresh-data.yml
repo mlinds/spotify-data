@@ -8,8 +8,8 @@ env:
 on: 
   workflow_dispatch:
   push:
-  schedule:
-    - cron: 3 0,9,11,14,17,21 * * 1-5     
+  # schedule:
+    # - cron: 3 0,9,11,14,17,21 * * 1-5     
 jobs:
   build:
 
