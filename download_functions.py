@@ -1,12 +1,13 @@
 import logging
+import optparse
+import os
 from datetime import timedelta
 from os import getenv
 from sys import stdout
-import optparse
+
 import pandas as pd
 import requests_cache
 from spotipy.oauth2 import SpotifyOAuth
-import os 
 
 try:
     from secret_vars import CLIENT_ID, CLIENT_SECRET
