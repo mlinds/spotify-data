@@ -6,6 +6,7 @@ import optparse
 import pandas as pd
 import requests_cache
 from spotipy.oauth2 import SpotifyOAuth
+import os 
 
 try:
     from secret_vars import CLIENT_ID, CLIENT_SECRET
@@ -225,4 +226,4 @@ if __name__ == "__main__":
     download_recent_top("short")
     download_recent_top("medium")
     download_recent_top("long")
-    os.environ["SPOTIFY_TOKEN_CACHE"] = refresh_dict
+    os.environ["SPOTIFY_TOKEN_CACHE"] = str(refresh_dict)
