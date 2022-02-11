@@ -3,6 +3,8 @@ name: refresh spotify data
 env:
   CLIENT_ID: ${{ secrets.CLIENT_ID }}
   CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  SPOTIFY_TOKEN_CACHE: ${{ secrets.CACHED_TOKEN}}
 on: 
   workflow_dispatch:
   push:
@@ -24,7 +26,7 @@ jobs:
     - name: Python Dependency Installation
       uses: py-actions/py-dependency-install@v3.0.0
     - name: update the data files
-      run: python download_functions.py
+      run: python download_functions.py | gh secret set CACHED_TOKEN
     - name: commit and push if changed
       run: |-
         git config user.name "Automated"

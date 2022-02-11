@@ -1,6 +1,7 @@
 import logging
 from datetime import timedelta
 from os import getenv
+from sys import stdout
 
 import pandas as pd
 import requests_cache
@@ -33,9 +34,12 @@ def get_auth_token():
         # requests_timeout=20
     )
     
-    return manager.get_access_token(as_dict=False)
+    return manager.get_access_token()
 
-token = get_auth_token()
+# get the full token information
+refresh_dict = get_auth_token()
+token = refresh_dict['access_token']
+
 logger.debug('authentication worked')
 
 
@@ -63,7 +67,6 @@ def parse_library_json(api_return):
 
         yield songdata
 
-
 def parse_top_tracks_json(api_return):
     """
     Parse the API response when requesting top tracks
@@ -84,7 +87,6 @@ def parse_top_tracks_json(api_return):
         }
 
         yield songdata
-
 
 def parse_recent_tracks_json(api_return):
     """[summary]
@@ -168,14 +170,12 @@ def generic_download(url, parse_func, csv_out):
         df.to_csv(csv_out, index=None)
         logger.info('CSV data saved to %s',csv_out)
 
-
 def download_library_tracks():
     """Download all library tracks"""
     url = "me/tracks"
     csv_path = "./data_out/all_tracks.csv"
     parse_func = parse_library_json
     generic_download(url=url, parse_func=parse_func, csv_out=csv_path)
-
 
 def download_recent_top(time_range):
     """Downloads the top tracks in a certain time range
@@ -188,14 +188,12 @@ def download_recent_top(time_range):
     parse_func = parse_top_tracks_json
     generic_download(url=url, parse_func=parse_func, csv_out=csv_path)
 
-
 def download_recent_streams():
     """Download the most recent streams"""
     url = "me/player/recently-played?limit=10"
     csv_path = "./data_out/recent.csv"
     parse_func = parse_recent_tracks_json
     generic_download(url=url, parse_func=parse_func, csv_out=csv_path)
-
 
 def append_recent_streams():
     download_recent_streams()
@@ -205,11 +203,14 @@ def append_recent_streams():
         "./data_out/streamHistory.csv",index=False
     )
 
+def token_output():
+    return token
 if __name__ == '__main__':
     append_recent_streams()
     download_recent_top("short")
     download_recent_top("medium")
     download_recent_top("long")
+    stdout.write(str(refresh_dict))
     
     
     
