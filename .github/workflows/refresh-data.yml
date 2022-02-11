@@ -26,9 +26,10 @@ jobs:
     - name: Python Dependency Installation
       uses: py-actions/py-dependency-install@v3.0.0
     - name: update the data files
-      run: python download_functions.py | gh secret set CACHED_TOKEN
+      run: python download_functions.py 
     - name: commit and push if changed
       run: |-
+        gh secrets -f .cache-maelinds
         git config user.name "Automated"
         git config user.email "actions@users.noreply.github.com"
         git add ./data_out/*
